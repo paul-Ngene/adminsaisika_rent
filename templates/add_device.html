@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+
+{% block title %}Add Device{% endblock %}
+
+{% block devices %}{% url 'devices'  %}{% endblock %}
+{% block assign %}{% url 'assign_device'  %}{% endblock %}
+{% block users %}{% url 'users'  %}{% endblock %} users
+{% block login %}{% url 'login'  %}{% endblock %}
+{% block logout %}{% url 'logout'  %}{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:center; align-items:center; min-height:80vh;">
+    <div style="width:400px; padding:20px; border:1px solid #ddd; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);">
+
+```
+<h2>Add Device to Stock</h2>
+
+{% for message in messages %}
+    <p style="color: green;">{{ message }}</p>
+{% endfor %}
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Device Name:</label><br>
+    <input type="text" name="name" required style="width:100%; padding:8px; margin-top:5px;"><br><br>
+
+    <label>Serial Number:</label><br>
+    <input type="text" name="serial_number" required style="width:100%; padding:8px; margin-top:5px;"><br><br>
+
+    <label>Device Model:</label><br>
+    <input type="text" name="device_model" required style="width:100%; padding:8px; margin-top:5px;"><br><br>
+
+   
+     <button type="submit" style="width:100%; padding:10px; background:#00008B; color:white; border:none; border-radius:5px;">
+            Add Device
+        </button>
+</form>
+
+</div>
+```
+
+</div>
+{% endblock %}

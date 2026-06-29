@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard{% endblock %}
+
+{% block devices %}{% url 'devices'  %}{% endblock %}
+{% block assign %}{% url 'assign_device_with_id' pk=users.id %}{% endblock %}
+{% block users %}{% url 'users'  %}{% endblock %} users
+{% block login %}{% url 'login'  %}{% endblock %}
+{% block logout %}{% url 'logout'  %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-4">
+
+```
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">{{ users.user.username|upper }}</h2>
+
+    <a href="{% url 'assign_device_with_id' pk=users.id %}">
+        <button class="btn btn-primary">
+            + Assign Device
+        </button>
+    </a>
+</div>
+
+<!-- User Info -->
+<div class="card p-3 mb-4 shadow-sm">
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>DOB:</strong> {{ users.birthdate }}</p>
+            <p><strong>Gender:</strong> {{ users.gender }}</p>
+            <p><strong>Phone:</strong> {{ users.phone }}</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Role:</strong> {{ users.role }}</p>
+            <p><strong>NIN:</strong> {{ users.nin }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Search -->
+<form method="GET" class="mb-3">
+    <input 
+        type="text" 
+        name="q" 
+        value="{{ request.GET.q }}" 
+        placeholder="Search devices..." 
+        class="form-control"
+    >
+</form>
+
+<!-- Devices Table -->
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <h4 class="mb-3">Assigned Devices</h4>
+
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Assigned</th>
+                    <th>Due</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for device in users.user.devices.all %}
+                <tr 
+                    {% if device.due_date < now %}
+                        style="background-color:#ffe6e6;"
+                    {% endif %}
+                >
+
+                    <td>{{ device.name }}</td>
+
+                    <!-- STATUS BADGES -->
+                    <td>
+                        {% if device.status == "ACTIVE" %}
+                            <span class="badge bg-success">Active</span>
+                        {% elif device.status == "AVAILABLE" %}
+                            <span class="badge bg-secondary">Available</span>
+                        {% elif device.status == "RETURNED" %}
+                            <span class="badge bg-info">Returned</span>
+                        {% else %}
+                            <span class="badge bg-dark">{{ device.status }}</span>
+                        {% endif %}
+                    </td>
+
+                    <td>{{ device.assigned_at }}</td>
+                    <td>{{ device.due_date }}</td>
+
+                    <!-- ACTIONS -->
+                    <td>
+                        <!-- Return Button -->
+                        <a href="{% url 'return_device' device.id %}" class="btn btn-sm btn-danger">
+                            Return
+                        </a>
+
+                        <!-- Update -->
+                        <a href="{% url 'update_device' device.id %}" class="btn btn-sm btn-primary">
+                            Edit
+                        </a>
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No devices found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+<!-- Pagination -->
+<div class="mt-3 d-flex justify-content-center">
+
+    {% if devices.has_other_pages %}
+        <nav>
+            <ul class="pagination">
+
+                {% if devices.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ devices.previous_page_number }}&q={{ request.GET.q }}">Previous</a>
+                    </li>
+                {% endif %}
+
+                {% for num in devices.paginator.page_range %}
+                    <li class="page-item {% if devices.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}&q={{ request.GET.q }}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+
+                {% if devices.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ devices.next_page_number }}&q={{ request.GET.q }}">Next</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+    {% endif %}
+
+</div>
+```
+
+</div>
+
+{% endblock %}

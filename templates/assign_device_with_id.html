@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Assign Device{% endblock %}
+
+{% block devices %}{% url 'devices'  %}{% endblock %}
+{% block assign %}{% url 'assign_device_with_id' pk=users.id %}{% endblock %}
+{% block users %}{% url 'users'  %}{% endblock %} users
+{% block login %}{% url 'login'  %}{% endblock %}
+{% block logout %}{% url 'logout'  %}{% endblock %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:center; align-items:center; min-height:80vh;">
+    <div style="width:400px; padding:20px; border:1px solid #ddd; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);">
+
+```
+    <h2 style="text-align:center;">Assign Device to User</h2>
+
+    {% for message in messages %}
+        <p style="color:green; text-align:center;">{{ message }}</p>
+    {% endfor %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Select Device:</label><br>
+        <select name="device_id" required style="width:100%; padding:8px; margin-top:5px;">
+            <option value="">-- Select Available Device --</option>
+            {% for device in devices %}
+                <option value="{{ device.id }}">
+                    {{ device.name }} ({{ device.serial_number }})
+                </option>
+            {% empty %}
+                <option disabled>No available devices</option>
+            {% endfor %}
+        </select>
+
+        <br><br>
+
+        <button type="submit" style="width:100%; padding:10px; background:#00008B; color:white; border:none; border-radius:5px;">
+            Assign Device
+        </button>
+    </form>
+
+    <hr>
+
+    <h3>User Devices</h3>
+
+    {% for device in users.user.devices.all %}
+        <div style="margin-bottom:10px; padding:10px; border:1px solid #eee; border-radius:5px;">
+            <strong>{{ device.name }}</strong><br>
+            Status: {{ device.status }} <br>
+            Assigned: {{ device.assigned_at }} <br>
+            Due: {{ device.due_date }} <br>
+
+            {% if device.due_date < now %}
+                <span style="color:red;">(DUE)</span>
+            {% else %}
+                <span style="color:green;">(Active)</span>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No devices assigned</p>
+    {% endfor %}
+
+</div>
+```
+
+</div>
+
+{% endblock %}

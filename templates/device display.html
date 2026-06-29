@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+
+{% block title %}Device List{% endblock %}
+
+{% block devices %}{% url 'devices'  %}{% endblock %}
+{% block assign %}{% url 'assign_device'  %}{% endblock %}
+{% block users %}{% url 'users'  %}{% endblock %} users
+{% block login %}{% url 'login'  %}{% endblock %}
+{% block logout %}{% url 'logout'  %}{% endblock %}
+
+
+{% block content %}
+<br><br>
+<div class="container-fluid text-center">    
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+      <p><a href="{% url 'add_device'  %}">Add Devices</a></p> 
+
+    </div>
+    <div class="col-sm-8 text-left"> 
+<!--post area-->
+<br>
+							<div id="post_bar">
+								<!--post 1 -->
+                
+								<div id="post">
+                 
+                 <!-- <a href="{% url 'user-info' pk=user.id %}"> -->
+									<!-- <div>
+									
+										<img src="user1.jpg" style="width:75px; 	margin-right: 4px;">
+									</div> -->
+									<div>
+										<!-- <div style ="font-weight:bold; color: 405d9b">{{user.user.username|upper}}</div> -->
+                      
+                     <!-- </a> -->
+                   
+                   <!-- Check every device to see if it belongs to this specific user -->
+                    
+                        {% for device in devices %}
+                        <strong>Device: {{device.name}}</strong> 
+                         
+                                <br>{{ device.name }}<br>Status: {{ device.status }}  <br> Serial No: {{device.serial_number}}<br><br>
+                                 <!-- {{ device.name }} -->
+                            
+                        {% empty %}
+                            <br>No devices
+                        {% endfor %}
+ 
+									  <!-- <br>hhhhhhhhhhhhhhhhhh<br>hhhhhhhhhhhhhhhhhhhhhhhhhrahraerahaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<br>
+									<br> -->
+									<!-- <a href="">Rent device </a>. <a href="">Buy </a>. <span style="color:#999;">Date borrowed or none</span> <span style="color:#999;">Delete</span> <span style="color:#999;">update</span> -->
+									</div>
+								
+								</div>
+               
+               
+								
+								
+								
+								
+								
+								
+								
+								
+								
+							</div>
+							
+    </div>
+    
+    <div class="col-sm-2 sidenav">
+      <div class="well">
+        <p>ADS</p>
+      </div>
+      <div class="well">
+        <p>ADS</p>
+      </div>
+    </div>
+    
+  </div>
+
+{% endblock %}

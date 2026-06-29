@@ -1,0 +1,78 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body> -->
+<!-- 
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">MY WEBSITE</a>
+        </div>
+    </div>
+</nav> -->
+{% extends "base.html" %}
+
+
+{% block title %}Login{% endblock %}
+
+{% block devices %}{% url 'devices'  %}{% endblock %}
+{% block assign %}{% url 'assign_device'  %}{% endblock %}
+{% block users %}{% url 'users'  %}{% endblock %} users
+{% block login %}{% url 'login'  %}{% endblock %}
+{% block logout %}{% url 'logout'  %}{% endblock %}
+
+
+{% block content %}
+<div class="container text-center slide" style="margin-top: 120px; max-width: 400px;">
+    <h2>Login</h2>
+    <h4>Access your account</h4>
+    
+    <div class="panel panel-default" style="border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.05); padding: 20px;">
+        <div class="panel-body">
+                  <div>
+                    <style>
+                        h5{
+                            color: red;
+                        }
+                    </style>
+                      {% for message in messages %}
+                    <h5>{{message}}</h5>
+                    {% endfor %}
+                  </div>
+            <form action="" method="POST" style="text-align: left;">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="email" style="font-family: Montserrat, sans-serif; font-size: 12px; letter-spacing: 1px;">Email Address</label>
+                    <input type="email" class="form-control" id="email" name = "email"  placeholder="Enter email" required style="border-radius: 0; height: 40px;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="pwd" style="font-family: Montserrat, sans-serif; font-size: 12px; letter-spacing: 1px;">Password</label>
+                    <input type="password" class="form-control" id="pwd" name = "password" placeholder="Enter password" required style="border-radius: 0; height: 40px;">
+                </div>
+                
+                <div class="checkbox">
+                    <label><input type="checkbox"> Remember me</label>
+                </div>
+                
+                <button type="submit" class="btn btn-block btn-primary-custom" style="height: 45px; font-family: Montserrat, sans-serif; letter-spacing: 2px; text-transform: uppercase; margin-top: 20px;">
+                    Sign In
+                </button>
+                
+            </form>
+        </div>
+    </div>
+    
+    <p style="margin-top: 20px;">
+        Don't have an account? <a href="{% url 'register' %}" class="sidenav" style="text-decoration: none; font-weight: 600;">Register here</a>
+    </p>
+</div>
+
+{% endblock %}

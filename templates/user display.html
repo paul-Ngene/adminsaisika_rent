@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block devices %}{% url 'devices' %}{% endblock %}
+{% block assign %}{% url 'assign_device' %}{% endblock %}
+{% block users %}{% url 'users' %}{% endblock %}
+{% block login %}{% url 'login' %}{% endblock %}
+{% block logout %}{% url 'logout' %}{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="mb-4">User Management</h2>
+
+    <div class="row">
+        {% for user in users %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card shadow-sm h-100">
+
+                <!-- User Header -->
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="user1.jpg" 
+                             class="rounded-circle me-3" 
+                             width="60" height="60">
+
+                        <div>
+                            <a href="{% url 'user-info' pk=user.id %}" 
+                               class="text-decoration-none">
+                                <h5 class="mb-0 text-primary">
+                                    {{ user.user.username|upper }}
+                                </h5>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Devices Section -->
+                    <h6 class="text-muted">Devices</h6>
+                    <ul class="list-group list-group-flush">
+                        {% for device in user.user.devices.all %}
+                            <li class="list-group-item px-0">
+                                {{ device.name }}
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item px-0 text-muted">
+                                No devices assigned
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Optional Footer -->
+                <div class="card-footer text-end bg-white">
+                    <a href="{% url 'user-info' pk=user.id %}" 
+                       class="btn btn-sm btn-outline-primary">
+                        View Details
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-muted">No users found.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
