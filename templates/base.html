@@ -14,7 +14,7 @@
 
 
 
-  <style>
+ <style>
   body {
     font: 400 15px Lato, sans-serif;
     line-height: 1.8;
@@ -186,7 +186,7 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
         <li><a href="{% block devices %}{% endblock %}">DEVICES</a></li>
-        <li><a href="{% block assign %}{% endblock %}">ASSIGN DEVICE</a></li>
+        <li><a href="{% block assign %}{% endblock %}">RENT DEVICE</a></li>
         <li><a href="{% block users %}{% endblock %}">USERS</a></li>
         {% if user.is_authenticated%}
         <li style="padding-left: 20px;"><a href="{% block logout %}{% endblock %}">Log out</a></li>

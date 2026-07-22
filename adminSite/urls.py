@@ -15,4 +15,5 @@ urlpatterns = [
     path('update_device/<str:pk>', views.update_device, name='update_device'),
     path('assign-device/<str:pk>', views.assign_device_with_id, name='assign_device_with_id'),
     path('add-device/', views.add_device, name='add_device'),
+    path('rent-devices/', views.rent_device_flow, name='rent_device_flow'),
 ]

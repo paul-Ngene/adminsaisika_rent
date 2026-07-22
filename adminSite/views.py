@@ -21,6 +21,8 @@ from django.utils import timezone
 
 from django.contrib.auth.decorators import login_required
 from .models import Device, User_info
+from django.db.models import Q
+
 from itertools import chain
 
 User = get_user_model()
@@ -167,6 +169,47 @@ def assign_device(request):
     }
 
     return render(request, "assign_device.html", context)
+
+@login_required(login_url='login')
+def rent_device_flow(request):
+    if request.method == "POST":
+        device_search = request.POST.get("device_search")
+        user_search = request.POST.get("user_search")
+
+        # 1. Look up the device by Name or Serial Number
+        device = Device.objects.filter(
+            Q(serial_number=device_search) | Q(name__icontains=device_search)
+        ).first()
+
+        if not device:
+            messages.error(request, f"Device matching '{device_search}' not found.")
+            return render(request, 'rent_device_flow.html', {"device_search": device_search, "user_search": user_search})
+
+        if device.status != "AVAILABLE":
+            messages.error(request, f"Device '{device.name}' is currently {device.status} and cannot be rented.")
+            return render(request, 'rent_device_flow.html', {"device_search": device_search, "user_search": user_search})
+
+        # 2. Look up the user using Phone or NIN from the User_info profile
+        user_info = User_info.objects.filter(
+            Q(phone=user_search) | Q(nin=user_search)
+        ).select_related('user').first()
+
+        # If user does not exist in the system, redirect to the registration page
+        if not user_info:
+            messages.info(request, f"No user found with Phone/NIN: '{user_search}'. Please register them first.")
+            return redirect('register')
+
+        # 3. Process the Rental Assignment
+        device.current_user = user_info.user
+        device.status = "ACTIVE"
+        device.assigned_at = timezone.now()
+        device.due_date = timezone.now() + timedelta(hours=24) # 24-hour rental window
+        device.save()
+
+        messages.success(request, f"Successfully rented '{device.name}' to {user_info.user.username}!")
+        return redirect('users')
+
+    return render(request, 'rent_device_flow.html')
 
 @login_required(login_url='login')
 def return_device(request, pk):
