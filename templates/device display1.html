@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Device List{% endblock %}
+
+{% block devices %}{% url 'devices' %}{% endblock %}
+{% block assign %}{% url 'rent_device_flow' %}{% endblock %}
+{% block users %}{% url 'users' %}{% endblock %}
+{% block login %}{% url 'login' %}{% endblock %}
+{% block logout %}{% url 'logout' %}{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Device Management</h2>
+
+        <a href="{% url 'add_device' %}" class="btn btn-primary">
+            + Add Device
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Device Name</th>
+                    <th>Serial Number</th>
+                    <th>Status</th>
+                    <th>Assigned User</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for device in devices %}
+                <tr>
+
+                    <td>{{ forloop.counter }}</td>
+
+                    <td>
+                        <strong>{{ device.name }}</strong>
+                    </td>
+
+                    <td>{{ device.serial_number }}</td>
+
+                    <td>
+                        {% if device.status == "AVAILABLE" %}
+                            <span class="badge bg-success">
+                                {{ device.status }}
+                            </span>
+
+                        {% elif device.status == "RENTED" %}
+                            <span class="badge bg-warning text-dark">
+                                {{ device.status }}
+                            </span>
+
+                        {% elif device.status == "MAINTENANCE" %}
+                            <span class="badge bg-danger">
+                                {{ device.status }}
+                            </span>
+
+                        {% else %}
+                            <span class="badge bg-secondary">
+                                {{ device.status }}
+                            </span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if device.current_user %}
+                            {{ device.current_user.username }}
+                        {% else %}
+                            <span class="text-muted">Not Assigned</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+
+                        {% comment %} <a href="{% url 'device_detail' device.id %}"
+                           class="btn btn-sm btn-outline-primary">
+                            View
+                        </a> {% endcomment %}
+
+                        <a
+                           class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+
+                        {% comment %} use PUT http clause {% endcomment %}
+
+                        {% comment %} <a href="{% url 'update_device' device.id %}"
+                           class="btn btn-sm btn-outline-warning">
+                            Edit
+                        </a> {% endcomment %}
+
+                        <a 
+                           class="btn btn-sm btn-outline-warning">
+                            Edit
+                        </a>
+
+                        {% comment %} use DELETE http clause {% endcomment %}
+
+                        {% comment %} <a href="{% url 'delete_device' device.id %}"
+                           class="btn btn-sm btn-outline-danger">
+                            Delete
+                        </a> {% endcomment %}
+
+                        <a 
+                           class="btn btn-sm btn-outline-danger">
+                            Delete
+                        </a>
+
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="6" class="text-center text-muted">
+                        No devices available.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

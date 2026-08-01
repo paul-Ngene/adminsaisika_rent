@@ -5,6 +5,10 @@ from django.contrib.auth.models import User, auth
 
 import json
 from django.contrib import messages
+from django.db import transaction, DatabaseError
+from .forms import UserRegistrationForm
+from .models import User_info
+
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -70,7 +74,7 @@ def userList(request):
         'users': users,
     }
 
-    return render(request, 'user display.html', context)
+    return render(request, 'user display1.html', context)
 
 @login_required(login_url='login')
 def deviceList(request):
@@ -87,7 +91,7 @@ def deviceList(request):
         "devices": devices,
         "due_devices": due_devices,
     }
-    return render(request, 'device display.html', context)
+    return render(request, 'device display1.html', context)
 
 @login_required(login_url='login')
 def assign_device_with_id(request,pk):
@@ -197,7 +201,7 @@ def rent_device_flow(request):
         # If user does not exist in the system, redirect to the registration page
         if not user_info:
             messages.info(request, f"No user found with Phone/NIN: '{user_search}'. Please register them first.")
-            return redirect('register')
+            return redirect('register1')
 
         # 3. Process the Rental Assignment
         device.current_user = user_info.user
@@ -306,9 +310,10 @@ def login(request):
 
         user = auth.authenticate(username=username, password=password)
 
-        if user is not None:
+        if user is not None and user.is_staff:
+            
             auth.login(request, user)
-            return redirect('users')
+            return redirect('rent_device_flow')
         else:
             messages.info(request, 'Credentials Invalid')
             return redirect('login')
@@ -323,6 +328,42 @@ def logout(request):
 
 
 
+@login_required(login_url='login') 
+def register1(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST, request.FILES)
+        # added try except and transaction atomic so as to make sure user is created together with user_info
+        if form.is_valid():
+            try:
+                # Everything inside this block is treated as an atomic operation
+                with transaction.atomic():
+                # if form.is_valid():
+                    # 1. Create and save primary User
+                    user = form.save(commit=False)
+                    user.set_password(form.cleaned_data['password'])
+                    user.save()
+
+                    # 2. Create User_info instance linked to the user
+                    User_info.objects.create(
+                        user=user,
+                        username1=user.username,
+                        phone=form.cleaned_data.get('phone'),
+                        nin=form.cleaned_data.get('nin'),
+                        gender=form.cleaned_data.get('gender'),
+                        birthdate=str(form.cleaned_data.get('birthdate')),
+                        profile_image=form.cleaned_data.get('profile_image'),
+                        role=User_info.Role.CUSTOMER
+                    )
+
+                messages.success(request, 'Account created successfully! You can now log in.')
+                return redirect('rent_device_flow') # 
+            except Exception as e:
+                # If anything goes wrong inside the block, transaction rolls back automatically
+                messages.error(request, f"An error occurred during registration: {e}")
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, 'register1.html', {'form': form})
 # from django.core.paginator import Paginator
 
 # devices_list = user.user.devices.all()

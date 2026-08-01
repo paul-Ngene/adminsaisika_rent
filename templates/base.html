@@ -37,7 +37,7 @@
 
   .navbar {
     margin-bottom: 0;
-    background-color: #00008B;
+    background-color: #0165fc;
     z-index: 9999;
     border: 0;
     font-size: 12px !important;
@@ -60,7 +60,7 @@
   footer .glyphicon {
     font-size: 20px;
     margin-bottom: 20px;
-    color: #00008B;
+    color: #0165fc;
   }
     /* Side navigation panel */
     .sidenav {
@@ -131,7 +131,7 @@
     }
   }
   .btn-primary-custom{
-    background:#00008B;
+    background:#0165fc;
     color:#fff;
     border:none;
 }
@@ -188,6 +188,7 @@
         <li><a href="{% block devices %}{% endblock %}">DEVICES</a></li>
         <li><a href="{% block assign %}{% endblock %}">RENT DEVICE</a></li>
         <li><a href="{% block users %}{% endblock %}">USERS</a></li>
+        <li><a href="{% url 'register1' %}">Add User</a></li>
         {% if user.is_authenticated%}
         <li style="padding-left: 20px;"><a href="{% block logout %}{% endblock %}">Log out</a></li>
         {% else %}

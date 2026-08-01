@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - SAISIKA MEC TECHNOLOGY{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 100px; margin-bottom: 50px;">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="panel panel-default" style="border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div class="panel-heading" style="background-color: #0165fc; color: #fff; text-align: center; padding: 20px;">
+          <h3 style="margin: 0; font-family: 'Montserrat', sans-serif; letter-spacing: 2px;">CREATE ACCOUNT</h3>
+        </div>
+        <div class="panel-body" style="padding: 30px;">
+          
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <h4 style="border-bottom: 2px solid #00008B; padding-bottom: 5px; color: #0165fc;">Account Details</h4>
+            
+            <div class="row">
+              <div class="col-sm-6 form-group {% if form.username.errors %}has-error{% endif %}">
+                <label for="{{ form.username.id_for_label }}">Username *</label>
+                {{ form.username }}
+                {% for error in form.username.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+              </div>
+              <div class="col-sm-6 form-group {% if form.email.errors %}has-error{% endif %}">
+                <label for="{{ form.email.id_for_label }}">Email Address *</label>
+                {{ form.email }}
+                {% for error in form.email.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6 form-group {% if form.first_name.errors %}has-error{% endif %}">
+                <label for="{{ form.first_name.id_for_label }}">First Name *</label>
+                {{ form.first_name }}
+                {% for error in form.first_name.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+              </div>
+              <div class="col-sm-6 form-group {% if form.last_name.errors %}has-error{% endif %}">
+                <label for="{{ form.last_name.id_for_label }}">Last Name *</label>
+                {{ form.last_name }}
+                {% for error in form.last_name.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6 form-group {% if form.password.errors %}has-error{% endif %}">
+                <label for="{{ form.password.id_for_label }}">Password *</label>
+                {{ form.password }}
+                {% for error in form.password.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+              </div>
+              <div class="col-sm-6 form-group {% if form.confirm_password.errors %}has-error{% endif %}">
+                <label for="{{ form.confirm_password.id_for_label }}">Confirm Password *</label>
+                {{ form.confirm_password }}
+                {% for error in form.confirm_password.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+              </div>
+            </div>
+
+            <h4 style="border-bottom: 2px solid #00008B; padding-bottom: 5px; margin-top: 25px; color: #0165fc;">Personal Information</h4>
+
+            <div class="row">
+              <div class="col-sm-6 form-group {% if form.nin.errors %}has-error{% endif %}">
+                <label for="{{ form.nin.id_for_label }}">NIN (National Identity Number) *</label>
+                {{ form.nin }}
+                {% for error in form.nin.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+              </div>
+              <div class="col-sm-6 form-group {% if form.phone.errors %}has-error{% endif %}">
+                <label for="{{ form.phone.id_for_label }}">Phone Number</label>
+                {{ form.phone }}
+                {% for error in form.phone.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6 form-group">
+                <label for="{{ form.gender.id_for_label }}">Gender</label>
+                {{ form.gender }}
+              </div>
+              <div class="col-sm-6 form-group">
+                <label for="{{ form.birthdate.id_for_label }}">Date of Birth</label>
+                {{ form.birthdate }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="{{ form.profile_image.id_for_label }}">Profile Picture</label>
+              {{ form.profile_image }}
+            </div>
+
+            <br>
+            <button type="submit" class="btn btn-primary-custom btn-lg btn-block" style="border-radius: 2px;">
+              REGISTER
+            </button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
