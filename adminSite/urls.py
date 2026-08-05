@@ -2,8 +2,8 @@ from django.urls import path # type: ignore
 from . import views
 
 urlpatterns = [
-    # path('',views.main, name = 'main'),
-    path('',views.index, name = 'index'),
+    path('',views.rent_device_flow, name = ''),
+    path('index',views.index, name = 'index'),
     path('user-info/<str:pk>',views.userInfo, name = 'user-info'),
     path('devices',views.deviceList, name = 'devices'),
     path('users',views.userList, name = 'users'),

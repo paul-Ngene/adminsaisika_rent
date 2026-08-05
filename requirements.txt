@@ -3,7 +3,6 @@ beautifulsoup4==4.14.3
 certifi==2026.5.20
 charset-normalizer==3.4.7
 Django==5.2.13
-django-bootstrap-v5==1.0.11
 idna==3.17
 pillow==12.2.0
 python-decouple==3.8
