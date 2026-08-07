@@ -22,7 +22,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('adminSite.urls'))
+    path('', include('adminSite.urls')),
+    path('api/', include('adminSite.api.urls'))
 ]
 
 # Serve media files only during development
