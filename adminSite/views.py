@@ -68,7 +68,20 @@ def userList(request):
     # device_context = {
     #     'devicelist': devicelist,
     #}
-    users = User_info.objects.select_related('user').prefetch_related('user__devices')
+    if request.method == "POST":
+        user_search = request.POST.get("user_search")
+
+        # 1. Look up the device by Name or Serial Number
+        users = User_info.objects.select_related('user').prefetch_related('user__devices').filter(
+            Q(phone=user_search)
+        ).filter()
+
+        if not users.exists():
+            messages.error(request, f" '{user_search}' not found.")
+           
+    else:
+
+        users = User_info.objects.select_related('user').prefetch_related('user__devices')
 
     context = {
         'users': users,
