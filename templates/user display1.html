@@ -11,9 +11,37 @@
 {% block content %}
 
 <div class="container mt-4">
-    <h2 class="mb-4">User Management</h2>
-
+    <br><br>
+   <div class="row align-items-center mb-4 g-3">
+        <div class="col-md-6">
+            <h2 class="mb-0 fw-bold text-dark">User Management</h2>
+        </div>
+        <div class="col-md-6">
+            <form method="POST" action="" class="w-100">
+                {% csrf_token %}
+                <div class="input-group">
+                    <span class="input-group-text bg-light text-secondary">
+                        <i class="bi bi-search"></i> <!-- Updated to Bootstrap Icons -->
+                    </span>
+                    <input type="text" 
+                           class="form-control" 
+                           id="user_search" 
+                           name="user_search" 
+                           placeholder="Search user by phone number..." 
+                           value="{{ user_search|default:'' }}" 
+                           required>
+                    <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                        Search
+                    </button>
+                </div>
+                <div class="form-text mt-1 text-muted small ps-1">
+                    Example: 08012345678
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="table-responsive">
+
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-dark">
                 <tr>
