@@ -3,7 +3,7 @@ from django.db import models # type: ignore
 from django.contrib.auth.hashers import make_password , check_password # type: ignore
 from django.contrib.auth.models import AbstractUser # type: ignore
 from django.contrib.auth import get_user_model
-
+from django.core.validators import MinValueValidator
 
 #using built_in django auth
 User = get_user_model()
@@ -23,7 +23,7 @@ class User_info(models.Model):
 
     phone = models.CharField(max_length=20, unique=True, blank=True, null=True)
 
-    nin = models.CharField(max_length=20, unique=True)
+    nin = models.CharField(max_length=20, unique=True,  blank=True, null=True)
 
     gender = models.CharField(max_length=20, blank=True)
 
@@ -57,7 +57,7 @@ class Device(models.Model):
 
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.AVAILABLE)
 
-    current_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="devices")
+    current_user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, blank=True, related_name="devices")
 
     # For days
     # assigned_date = models.DateField(null=True, blank=True)
@@ -73,3 +73,17 @@ class Device(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.serial_number}"
+
+# class Payment(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="payments")
+
+#     amount = models.DecimalField( max_digits=12, decimal_places=2, validators=[MinValueValidator(0)])
+
+#     payment_date = models.DateTimeField(auto_now_add=True)
+
+#     reference = models.CharField( max_length=100,unique=True,null=True,blank=True)
+
+#     description = models.CharField(max_length=255,blank=True)
+
+#     def __str__(self):
+#         return f"{self.user} - ₦{self.amount}"
